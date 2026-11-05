@@ -4,6 +4,8 @@ The take-home from the brief: a one page form a visiting nurse fills in while ch
 an elderly patient at home. React 19, TypeScript, Mantine 9, `@mantine/form` and the Zod 4
 schema that came with the brief. All data in the repo is made up.
 
+Live: https://geriatric-assessment-amit.netlify.app/
+
 ## Running it
 
 The template pins Node 26 in `.node-version`, so use that. On Node 22 `yarn test` crashes
