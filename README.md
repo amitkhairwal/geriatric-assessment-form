@@ -60,6 +60,9 @@ the trimmed name arrives; saving the raw state would fail it.
   fields also re-checks the fields that depend on it, but only the ones already touched.
 - **Dates** are typed and shown as `YYYY-MM-DD`, the format the schema wants, so nothing
   gets converted on the way in.
+- **Layout** is Mantine's `Fieldset` and `SimpleGrid` and nothing else, no CSS file: three
+  groups (patient, assessment, follow-up), one column on a phone and two from the `sm`
+  breakpoint up. The field order is still the one in the brief's table.
 - **Asterisks, but no `required` attribute.** The browser's own popup would stop the form
   before Zod gets to say anything.
 - **Consent** has its own label above a checkbox carrying the sentence from the brief, and

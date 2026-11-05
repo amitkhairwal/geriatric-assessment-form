@@ -5,10 +5,12 @@ import {
   Button,
   Checkbox,
   Code,
+  Fieldset,
   Group,
   Input,
   NumberInput,
   Select,
+  SimpleGrid,
   Stack,
   TextInput,
 } from '@mantine/core';
@@ -17,6 +19,9 @@ import { schemaResolver, useForm } from '@mantine/form';
 import { fakeSave } from './save';
 import { Assessment, assessmentSchema, MOBILITY } from './schema';
 import { AssessmentDraft, EMPTY_ASSESSMENT, SAMPLE_PATIENT } from './values';
+
+// One column on a phone, two from the small breakpoint up.
+const COLUMNS = { base: 1, sm: 2 };
 
 type DateField = 'dateOfBirth' | 'assessmentDate' | 'followUpDate';
 
@@ -102,58 +107,74 @@ export function AssessmentForm({ onSave = fakeSave }: AssessmentFormProps) {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack>
-        <TextInput
-          label="Medical record number"
-          placeholder="MRN-004821"
-          withAsterisk
-          {...inputProps('mrn')}
-        />
-        <TextInput label="Patient name" withAsterisk {...inputProps('patientName')} />
-        <DateInput label="Date of birth" defaultLevel="decade" {...dateProps('dateOfBirth')} />
-        <DateInput
-          label="Assessment date"
-          maxDate={dayjs().format('YYYY-MM-DD')}
-          {...dateProps('assessmentDate')}
-        />
-        <Select
-          label="Mobility"
-          placeholder="Select one"
-          data={MOBILITY_OPTIONS}
-          allowDeselect={false}
-          withAsterisk
-          {...inputProps('mobility')}
-          value={form.values.mobility || null}
-        />
-        {/* clampBehavior none: a score the nurse typed is rejected, never pulled into range */}
-        <NumberInput
-          label="Barthel Index"
-          step={5}
-          min={0}
-          max={100}
-          clampBehavior="none"
-          withAsterisk
-          {...inputProps('barthelIndex')}
-        />
-        <NumberInput
-          label="Regular medications"
-          min={0}
-          max={30}
-          clampBehavior="none"
-          withAsterisk
-          {...inputProps('medicationCount')}
-        />
-        <Checkbox
-          label="Pharmacist review requested"
-          {...form.getInputProps('pharmacistReviewRequested', { type: 'checkbox' })}
-        />
-        <DateInput label="Next review date" {...dateProps('followUpDate')} />
-        <Input.Wrapper label="Consent" error={consentError} withAsterisk>
-          <Checkbox
-            label="Patient or representative has given consent"
-            error={!!consentError}
-            {...form.getInputProps('consentObtained', { type: 'checkbox', withError: false })}
-          />
-        </Input.Wrapper>
+        <Fieldset legend="Patient">
+          <SimpleGrid cols={COLUMNS}>
+            <TextInput
+              label="Medical record number"
+              placeholder="MRN-004821"
+              withAsterisk
+              {...inputProps('mrn')}
+            />
+            <TextInput label="Patient name" withAsterisk {...inputProps('patientName')} />
+            <DateInput label="Date of birth" defaultLevel="decade" {...dateProps('dateOfBirth')} />
+          </SimpleGrid>
+        </Fieldset>
+
+        <Fieldset legend="Assessment">
+          <Stack>
+            <SimpleGrid cols={COLUMNS}>
+              <DateInput
+                label="Assessment date"
+                maxDate={dayjs().format('YYYY-MM-DD')}
+                {...dateProps('assessmentDate')}
+              />
+              <Select
+                label="Mobility"
+                placeholder="Select one"
+                data={MOBILITY_OPTIONS}
+                allowDeselect={false}
+                withAsterisk
+                {...inputProps('mobility')}
+                value={form.values.mobility || null}
+              />
+              {/* clampBehavior none: a score the nurse typed is rejected, never pulled into range */}
+              <NumberInput
+                label="Barthel Index"
+                step={5}
+                min={0}
+                max={100}
+                clampBehavior="none"
+                withAsterisk
+                {...inputProps('barthelIndex')}
+              />
+              <NumberInput
+                label="Regular medications"
+                min={0}
+                max={30}
+                clampBehavior="none"
+                withAsterisk
+                {...inputProps('medicationCount')}
+              />
+            </SimpleGrid>
+            <Checkbox
+              label="Pharmacist review requested"
+              {...form.getInputProps('pharmacistReviewRequested', { type: 'checkbox' })}
+            />
+          </Stack>
+        </Fieldset>
+
+        <Fieldset legend="Follow-up">
+          <Stack>
+            <DateInput label="Next review date" {...dateProps('followUpDate')} />
+            <Input.Wrapper label="Consent" error={consentError} withAsterisk>
+              <Checkbox
+                label="Patient or representative has given consent"
+                error={!!consentError}
+                {...form.getInputProps('consentObtained', { type: 'checkbox', withError: false })}
+              />
+            </Input.Wrapper>
+          </Stack>
+        </Fieldset>
 
         <Group justify="space-between">
           <Button variant="default" onClick={loadSample} disabled={form.submitting}>
