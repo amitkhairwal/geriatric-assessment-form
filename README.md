@@ -92,4 +92,4 @@ asks for exactly that version.
 
 ## Time
 
-About 1 hour 20 minutes.
+About 1 hour 45 minutes.
